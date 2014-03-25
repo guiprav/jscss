@@ -4,6 +4,7 @@ module.exports = function(ast) {
 		function(element) {
 			switch(element.type) {
 				case 'javascript':
+					new Function(element.code);
 					code += '\n' + element.code + ';'
 					break;
 				case 'css':
