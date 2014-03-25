@@ -62,11 +62,7 @@ _CSSSelector
         return head + tail;
     }
  
-  / !NewLine !['"] !'{' head:. tail:CSSSelector?
-    {
-        tail = tail || '';
-        return head + tail;
-    }
+  / $(!['"] !'{' head:. tail:CSSSelector?)
  
 CSSString
   = '"' _:CSSDoubleQuotedStringCharacter* '"'
