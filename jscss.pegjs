@@ -32,7 +32,13 @@ CSSRule
 _CSSRule
   = 'rule' __+ selector:CSSSelector __* '{' __* properties:CSSProperty* '}'
     {
-        return { type: 'css', selector: selector, properties: properties };
+        return {
+            type: 'css'
+            , selector: selector
+            , properties: properties
+            , line: line()
+            , column: column()
+        };
     }
  
 CSSSelector
@@ -74,7 +80,7 @@ CSSProperty
 _CSSProperty
   = name:CSSPropertyName __* ':' __* value:CSSPropertyValue __* ';'
     {
-        return { name: name, value: value };
+        return { name: name, value: value, line: line(), column: column() };
     }
  
 CSSPropertyName
@@ -106,7 +112,7 @@ CSSPropertyValueUnparsedPart
 UnparsedJavaScript
   = _:$(UnparsedJavaScriptElement+)
     {
-        return { type: 'javascript', code: _.trim() };
+        return { type: 'javascript', code: _.trim(), line: line(), column: column() };
     }
  
 UnparsedJavaScriptElement
