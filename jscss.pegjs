@@ -126,10 +126,7 @@ SingleLineComment
   = $('//' (!NewLine .)*)
  
 UnparsedJavaScriptLine
-  = $(!('rule' __+) !BadJavaScript (!NewLine UnparsedJavaScriptCharacter)+)
- 
-BadJavaScript
-  = (!NewLine !'do' !'else' !'try' UnparsedJavaScriptCharacter)+ '{'
+  = $(!('rule' __+) (!NewLine UnparsedJavaScriptCharacter)+)
  
 UnparsedUnambiguousJavaScriptElement
   = SingleLineComment
