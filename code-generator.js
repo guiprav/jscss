@@ -24,12 +24,12 @@ module.exports = function(ast) {
 											return JSON.stringify(part);
 										}
 										else {
+											var compute_local_fn = new Function (
+												'return ' + part.js + ';'
+											);
 											compute_locals +=
 													'\nlocals.push ('
-													+ '\n(function() {'
-													+ '\nreturn ' + part.js + ';'
-													+ '\n}'
-													+ '\n)()'
+													+ '\n(' + compute_local_fn + '\n)()'
 													+ '\n);';
 											return 'locals[' + (next_local_id++) + ']';
 										}
