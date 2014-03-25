@@ -89,6 +89,7 @@ CSSPropertyName
 CSSPropertyValue
   = _:CSSPropertyValuePart+
     {
+        _ = [].concat.apply([], _);
         if(_.length === 1) {
             return _[0];
         }
@@ -98,16 +99,30 @@ CSSPropertyValue
     }
 
 CSSPropertyValuePart
+  = CSSPropertyValueJavaScriptPart
+  / CSSPropertyValueBalancedPairPart
+  / CSSPropertyValueGenericPart
+
+CSSPropertyValueGenericPart
+  = CSSPropertyValueBalancedPairPart
+  / $(!'#{' ![[({})\]] !'/*' !'*/' !';' .)+
+
+CSSPropertyValueBalancedPairPart
+  = '(' _:CSSPropertyValueSemiColonAllowedPart* ')'
+    {
+        return [].concat('(', _, ')');
+    }
+
+CSSPropertyValueSemiColonAllowedPart
+  = CSSPropertyValueJavaScriptPart
+  / CSSPropertyValueBalancedPairPart
+  / $(!'#{' ![[({})\]] !'/*' !'*/' .)+
+
+CSSPropertyValueJavaScriptPart
   = '#{' __* js:UnparsedJavaScript? __* '}'
     {
         return { js: js.code };
     }
-
-  / $(!'#{' CSSPropertyValueUnparsedPart)+
-
-CSSPropertyValueUnparsedPart
-  = UnparsedGenericBalancedPair
-  / ![\[\](){}] !'/*' !'*/' !';' .
 
 UnparsedJavaScript
   = _:$(UnparsedJavaScriptElement+)
