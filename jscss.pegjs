@@ -126,28 +126,14 @@ CSSPropertyName
     }
  
 CSSPropertyValue
-  = _:CSSString
+  = _:$CSSPropertyValuePart+
     {
-        return { type: 'css', code: _ };
+        return _;
     }
- 
-  / _:(!['"] !';' _:. { return _ })+
-    {
-        var code = grammar_array_join(_).trim();
- 
-        var js_triggers = /[_+\-*\/]/;
- 
-        if (js_triggers.test(_))
-        {
-            var type = 'javascript-property-value';
-        }
-        else
-        {
-            var type = 'css';
-        }
- 
-        return { type: type, code: code };
-    }
+
+CSSPropertyValuePart
+  = UnparsedGenericBalancedPair
+  / ![\[\](){}] !'/*' !'*/' !';' .
  
 UnparsedJavaScript
   = _:UnparsedJavaScriptElement+
@@ -157,7 +143,7 @@ UnparsedJavaScript
  
 UnparsedJavaScriptElement
   = SingleLineComment
-  / UnparsedJavaScriptGenericBalancedPair
+  / UnparsedGenericBalancedPair
   / UnparsedJavaScriptString
   / UnparsedJavaScriptLine
   / __
@@ -179,11 +165,11 @@ BadJavaScript
  
 UnparsedUnambiguousJavaScriptElement
   = SingleLineComment
-  / UnparsedJavaScriptGenericBalancedPair
+  / UnparsedGenericBalancedPair
   / UnparsedJavaScriptString
   / UnparsedJavaScriptCharacter
  
-UnparsedJavaScriptGenericBalancedPair
+UnparsedGenericBalancedPair
   = '{' _:UnparsedUnambiguousJavaScriptElement* '}'
     {
         return '{' + grammar_array_join(_) + '}';
