@@ -12,4 +12,10 @@ rule .class-selector {
 	property-5: #{the_value + the_function()}px;
 }
 
+rule .class-selector
+, .multi-line
+{
+	property-1: simple-value;
+}
+
 the_function();
