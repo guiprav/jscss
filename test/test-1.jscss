@@ -15,7 +15,6 @@ rule .class-selector {
 rule .class-selector
 , .multi-line
 {
-	property-1: simple-value;
 }
 
 the_function();
