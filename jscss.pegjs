@@ -126,15 +126,28 @@ CSSPropertyName
     }
  
 CSSPropertyValue
-  = _:$CSSPropertyValuePart+
+  = _:CSSPropertyValuePart+
     {
-        return _;
+        if(_.length === 1) {
+            return _[0];
+        }
+        else {
+            return _;
+        }
     }
 
 CSSPropertyValuePart
+  = '#{' __* js:UnparsedJavaScript? __* '}'
+    {
+        return { js: js.code };
+    }
+
+  / $(!'#{' CSSPropertyValueUnparsedPart)+
+
+CSSPropertyValueUnparsedPart
   = UnparsedGenericBalancedPair
   / ![\[\](){}] !'/*' !'*/' !';' .
- 
+
 UnparsedJavaScript
   = _:UnparsedJavaScriptElement+
     {
