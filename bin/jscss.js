@@ -20,7 +20,7 @@
 var util = require('util');
 var fs = require('fs');
 var peg = require('pegjs');
-var codegen = require('./code-generator');
+var codegen = require('../src/code-generator');
 var input_file = process.argv[2];
 if(!input_file) {
 	console.error("Missing input file.");
@@ -28,7 +28,7 @@ if(!input_file) {
 	process.exit(-1);
 }
 var input_data = fs.readFileSync(input_file, 'utf8');
-var grammar_source = fs.readFileSync(__dirname + '/jscss.pegjs', 'utf8');
+var grammar_source = fs.readFileSync(__dirname + '/../src/jscss.pegjs', 'utf8');
 var jscss;
 try {
 	jscss = peg.buildParser(grammar_source);
