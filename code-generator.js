@@ -25,9 +25,12 @@ module.exports = function(ast) {
 										}
 										else {
 											compute_locals +=
-													'\nlocals.push(eval('
-													+ JSON.stringify(part.js)
-													+ '));';
+													'\nlocals.push ('
+													+ '\n(function() {'
+													+ '\nreturn ' + part.js + ';'
+													+ '\n}'
+													+ '\n)()'
+													+ '\n);';
 											return 'locals[' + (next_local_id++) + ']';
 										}
 									}
