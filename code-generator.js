@@ -44,7 +44,12 @@ module.exports = function(ast) {
 							);
 						}
 					);
-					rule_body = rule_body_parts.join('\n+ ');
+					if(rule_body_parts.length !== 0) {
+						rule_body = rule_body_parts.join('\n+ ');
+					}
+					else {
+						rule_body = '""';
+					}
 					code +=
 							'\n(function() {'
 							+ '\n' + compute_locals
