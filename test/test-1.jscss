@@ -1,8 +1,7 @@
-var declaration = 1;
+var the_value = 1;
 
-assignment = 2;
-
-function function_definition() {
+function the_function() {
+	return 2;
 }
 
 rule .class-selector {
@@ -10,7 +9,7 @@ rule .class-selector {
 	property-2: 3;
 	property-3: calc(2 + 2);
 	property-4: content('Test.');
-	property-5: #{10 + box_size}px;
+	property-5: #{the_value + the_function()}px;
 }
 
-function_call();
+the_function();
