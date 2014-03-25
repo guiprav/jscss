@@ -58,6 +58,7 @@ module.exports = function(ast) {
 							+ '\n+ ' + JSON.stringify('\n{')
 							+ '\n+ ' + rule_body
 							+ '\n+ ' + JSON.stringify('\n}')
+							+ '\n+ ' + JSON.stringify('\n')
 							+ '\n})();';
 					break;
 				default:
