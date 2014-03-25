@@ -1,0 +1,11 @@
+var test = 1;
+rule test {
+	property-1a: #{test};
+	property-1b: \#{test};
+	property-2a: calc(1 + #{test});
+	property-2b: calc(1 + \#{test});
+	property-3a: content('Test #{test}.');
+	property-3b: content('Test \#{test}.');
+	property-3c: content("Test #{test}.");
+	property-3d: content("Test \#{test}.");
+}
