@@ -1,7 +1,7 @@
 JSCSS
 =====
 
-JSCSS is a [PEG.js](http://pegjs.majda.cz) grammar and accompanying JavaScript for generating CSS files intermixed with JavaScript statements.
+JSCSS is a stylesheet language for CSS intermixed with JavaScript code. If ran in the browser, the JavaScript can even use the DOM to compute CSS values, but it is also possible to just process JSCSS files on the server and deliver plain old CSS to the browser instead.
 
 Example JSCSS stylesheet:
 
