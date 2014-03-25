@@ -1,0 +1,23 @@
+{
+  "name": "jscss",
+  "version": "0.0.0",
+  "description": "A JS+CSS stylesheet language.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n2liquid/jscss.git"
+  },
+  "keywords": [
+    "javascript",
+    "css",
+    "stylesheet"
+  ],
+  "author": "Guilherme Prá Vieira",
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/n2liquid/jscss/issues"
+  },
+  "homepage": "https://github.com/n2liquid/jscss",
+  "dependencies": {
+    "pegjs": "^0.8.0"
+  }
+}

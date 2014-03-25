@@ -1,0 +1,15 @@
+var declaration = 1;
+
+assignment = 2;
+
+function function_definition() {
+}
+
+rule .class-selector {
+	property-1: simple-value;
+	property-2: 3;
+	property-3: calc(2 + 2);
+	property-4: content('Test.');
+}
+
+function_call();
