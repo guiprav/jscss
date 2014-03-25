@@ -16,26 +16,12 @@
     You should have received a copy of the GNU Lesser General Public
     License along with JSCSS. If not, see <http://www.gnu.org/licenses/>.
 */
-{
-    function grammar_array_join (array)
-    {
-        return array.join('');
-    }
-}
-
 start
   = StylesheetElement*
 
 StylesheetElement
-  = _:CSSRule
-    {
-        return _;
-    }
- 
-  / _:UnparsedJavaScript
-    {
-        return _;
-    }
+  = CSSRule
+  / UnparsedJavaScript
  
 CSSRule
   = __* _:_CSSRule __*
@@ -56,24 +42,12 @@ CSSSelector
     }
  
 _CSSSelector
-  = head:CSSString tail:CSSSelector?
-    {
-        tail = tail || '';
-        return head + tail;
-    }
- 
-  / $(!['"] !'{' head:. tail:CSSSelector?)
+  = $(CSSString CSSSelector?)
+  / $(!['"] !'{' . CSSSelector?)
  
 CSSString
-  = '"' _:CSSDoubleQuotedStringCharacter* '"'
-    {
-        return '"' + grammar_array_join(_) + '"';
-    }
- 
-  / "'" _:CSSSingleQuotedStringCharacter* "'"
-    {
-        return "'" + grammar_array_join(_) + "'";
-    }
+  = $('"' CSSDoubleQuotedStringCharacter* '"')
+  / $("'" CSSSingleQuotedStringCharacter* "'")
  
 CSSDoubleQuotedStringCharacter
   = "'"
@@ -87,21 +61,9 @@ CSSGeneralStringCharacter
   = '\\"'
   / "\\'"
   / '\\\\'
- 
-  / '\\' _1:[0-9a-fA-F] _2:[0-9a-fA-F]?
-    {
-        return '\\' + _1 + _2;
-    }
- 
-  / '\\' _:NewLine
-    {
-        return '\\' + _;
-    }
- 
-  / !'\\' !['"] !NewLine _:.
-    {
-        return _;
-    }
+  / $('\\' [0-9a-fA-F] [0-9a-fA-F]?)
+  / $('\\' NewLine)
+  / $(!'\\' !['"] !NewLine .)
  
 CSSProperty
   = _:_CSSProperty __*
@@ -116,10 +78,7 @@ _CSSProperty
     }
  
 CSSPropertyName
-  = _:[0-9a-zA-Z\-]+
-    {
-        return grammar_array_join(_);
-    }
+  = $([0-9a-zA-Z\-]+)
  
 CSSPropertyValue
   = _:CSSPropertyValuePart+
@@ -145,9 +104,9 @@ CSSPropertyValueUnparsedPart
   / ![\[\](){}] !'/*' !'*/' !';' .
 
 UnparsedJavaScript
-  = _:UnparsedJavaScriptElement+
+  = _:$(UnparsedJavaScriptElement+)
     {
-        return { type: 'javascript', code: grammar_array_join(_).trim() };
+        return { type: 'javascript', code: _.trim() };
     }
  
 UnparsedJavaScriptElement
@@ -158,16 +117,10 @@ UnparsedJavaScriptElement
   / __
  
 SingleLineComment
-  = '//' _:(!NewLine _:. { return _ })*
-    {
-        return '//' + grammar_array_join(_);
-    }
+  = $('//' (!NewLine .)*)
  
 UnparsedJavaScriptLine
-  = !('rule' __+) !BadJavaScript _:(!NewLine _:UnparsedJavaScriptCharacter { return _ })+
-    {
-        return grammar_array_join(_);
-    }
+  = $(!('rule' __+) !BadJavaScript (!NewLine UnparsedJavaScriptCharacter)+)
  
 BadJavaScript
   = (!NewLine !'do' !'else' !'try' UnparsedJavaScriptCharacter)+ '{'
@@ -179,56 +132,24 @@ UnparsedUnambiguousJavaScriptElement
   / UnparsedJavaScriptCharacter
  
 UnparsedGenericBalancedPair
-  = '{' _:UnparsedUnambiguousJavaScriptElement* '}'
-    {
-        return '{' + grammar_array_join(_) + '}';
-    }
- 
-  / '[' _:UnparsedUnambiguousJavaScriptElement* ']'
-    {
-        return '[' + grammar_array_join(_) + ']';
-    }
- 
-  / '(' _:UnparsedUnambiguousJavaScriptElement* ')'
-    {
-        return '(' + grammar_array_join(_) + ')';
-    }
- 
-  / '/*' _:MultiLineCommentCharacter* '*/'
-    {
-        return '/*' + grammar_array_join(_) + '*/';
-    }
+  = $('{' UnparsedUnambiguousJavaScriptElement* '}')
+  / $('[' UnparsedUnambiguousJavaScriptElement* ']')
+  / $('(' UnparsedUnambiguousJavaScriptElement* ')')
+  / $('/*' MultiLineCommentCharacter* '*/')
  
 MultiLineCommentCharacter
-  = !'*/' _:.
-    {
-        return _;
-    }
+  = $(!'*/' .)
  
 UnparsedJavaScriptString
-  = '"' _:(JavaScriptStringCharacter / "'")* '"'
-    {
-        return '"' + grammar_array_join(_) + '"';
-    }
- 
-  / "'" _:(JavaScriptStringCharacter / '"')* "'"
-    {
-        return "'" + grammar_array_join(_) + "'";
-    }
+  = $('"' (JavaScriptStringCharacter / "'")* '"')
+  / $("'" (JavaScriptStringCharacter / '"')* "'")
  
 JavaScriptStringCharacter
-  = '\\' _:.
-    {
-        return _;
-    }
- 
-  / !['"\r\n] .
+  = $('\\' .)
+  / $(!['"\r\n] .)
  
 UnparsedJavaScriptCharacter
-  = !['"()\[\]{}] !'//' !'/*' !'*/' _:.
-    {
-        return _;
-    }
+  = $(!['"()\[\]{}] !'//' !'/*' !'*/' .)
  
 _ = [ \t]
  
