@@ -1,0 +1,5 @@
+var box_size = 10;
+
+rule #example {
+	width: #{10 INVALID_OPERATOR box_size}px;
+}
