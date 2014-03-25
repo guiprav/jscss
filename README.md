@@ -5,10 +5,10 @@ JSCSS is a [PEG.js](http://pegjs.majda.cz) grammar and accompanying JavaScript f
 
 Example JSCSS stylesheet:
 
-	var $box_size = $('#box').width();
+	var box_size = $('#box').width();
 
 	rule #example {
-		width: {10 + $box_size}px;
+		width: #{10 + box_size}px;
 	}
 
 Given a `#box` element of computed width 10px, the stylesheet above will be transformed into:
