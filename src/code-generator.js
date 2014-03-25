@@ -19,7 +19,11 @@ module.exports = function(ast) {
 								value = JSON.stringify(property.value);
 							}
 							else {
-								value = property.value.map (
+								value = property.value;
+								if(!Array.isArray(value)) {
+									value = [value];
+								}
+								value = value.map (
 									function(part) {
 										if(typeof(part) === 'string') {
 											return JSON.stringify(part);
