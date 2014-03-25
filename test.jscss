@@ -10,6 +10,7 @@ rule .class-selector {
 	property-2: 3;
 	property-3: calc(2 + 2);
 	property-4: content('Test.');
+	property-5: #{10 + box_size}px;
 }
 
 function_call();
