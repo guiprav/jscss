@@ -17,6 +17,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with JSCSS. If not, see <http://www.gnu.org/licenses/>.
 */
+var util = require('util');
 var fs = require('fs');
 var peg = require('pegjs');
 var input_file = process.argv[2];
@@ -46,4 +47,10 @@ catch(err) {
 	console.error("Line", err.line + ", column", err.column + ":", err.message);
 	process.exit(-1);
 }
-console.dir(jscss.parse(input_data));
+console.log (
+	util.inspect (
+		jscss.parse(input_data), {
+			depth: null
+		}
+	)
+);
