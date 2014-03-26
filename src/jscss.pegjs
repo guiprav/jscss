@@ -107,7 +107,9 @@ CSSPropertyValueGenericPart
   / _:(
         !'#{' ![[({})\]] !'/*' !'*/' !';'
         _:(
-            '\\#' &'{' { return '#' } / .
+            '\\\\' &'#{' { return '\\' }
+            / '\\#' &'{' { return '#' }
+            / .
         )
         {
             return _
@@ -146,7 +148,9 @@ _CSSPropertyValueSemiColonAllowedPart
   / _:(
         !'#{' ![[({})\]] !'/*' !'*/'
         _:(
-            '\\#' &'{' { return '#' } / .
+            '\\\\' &'#{' { return '\\' }
+            / '\\#' &'{' { return '#' }
+            / .
         )
         {
             return _
