@@ -4,11 +4,13 @@ rule test {
 	property-1b: \#{test};
 	property-1c: \##{test};
 	property-1d: \\#{test};
+	property-1e: \\#{test}\\;
 	property-2a: calc(1 + #{test});
 	property-2b: calc(1 + \#{test});
 	property-2c: calc(\# + #{test});
 	property-2d: calc(\# + \#{test});
 	property-2e: calc(1 + \\#{test});
+	property-2f: calc(1 + \\#{test})\\;
 	property-3a: content('Test #{test}.');
 	property-3b: content('Test \#{test}.');
 	property-3c: content("Test #{test}.");
@@ -16,4 +18,5 @@ rule test {
 	property-3e: content('Test #{test}. \#.');
 	property-3f: content("Test #{test}. \#.");
 	property-3g: content("Test \\#{test}.");
+	property-3h: content("Test \\#{test}.")\\;
 }
