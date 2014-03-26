@@ -105,7 +105,10 @@ CSSPropertyValuePart
 CSSPropertyValueGenericPart
   = CSSPropertyValueBalancedPairPart
   / _:(
-        !'#{' ![[({})\]] !'/*' !'*/' !';' _:('\\#' { return '#' } / .)
+        !'#{' ![[({})\]] !'/*' !'*/' !';'
+        _:(
+            '\\#' &'{' { return '#' } / .
+        )
         {
             return _
         }
@@ -141,7 +144,10 @@ _CSSPropertyValueSemiColonAllowedPart
   = CSSPropertyValueJavaScriptPart
   / CSSPropertyValueBalancedPairPart
   / _:(
-        !'#{' ![[({})\]] !'/*' !'*/' _:('\\#' { return '#' } / .)
+        !'#{' ![[({})\]] !'/*' !'*/'
+        _:(
+            '\\#' &'{' { return '#' } / .
+        )
         {
             return _
         }
