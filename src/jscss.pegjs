@@ -85,86 +85,24 @@ _CSSProperty
  
 CSSPropertyName
   = $([0-9a-zA-Z\-]+)
- 
+
 CSSPropertyValue
-  = _:CSSPropertyValuePart+
-    {
-        _ = [].concat.apply([], _);
-        if(_.length === 1) {
-            return _[0];
-        }
-        else {
-            return _;
-        }
-    }
+  = $(CSSPropertyValuePart+)
 
 CSSPropertyValuePart
-  = CSSPropertyValueJavaScriptPart
-  / CSSPropertyValueGenericPart
-
-CSSPropertyValueGenericPart
-  = CSSPropertyValueBalancedPairPart
-  / _:(
-        !'#{' ![[({})\]] !'/*' !'*/' !';'
-        _:(
-            '\\\\' &'#{' { return '\\' }
-            / '\\#' &'{' { return '#' }
-            / .
-        )
-        {
-            return _
-        }
-    )+
-    {
-        return _.join('');
-    }
+  = $(CSSPropertyValueBalancedPairPart)
+  / $(CSSString)
+  / $((!['"[({})\]] !'/*' !'*/' !';' .)+)
 
 CSSPropertyValueBalancedPairPart
-  = _:_CSSPropertyValueBalancedPairPart
-    {
-		_[1] = [].concat.apply([], _[1]);
-		return [].concat.apply([], _);
-    }
-
-_CSSPropertyValueBalancedPairPart
   = '[' CSSPropertyValueSemiColonAllowedPart* ']'
   / '(' CSSPropertyValueSemiColonAllowedPart* ')'
   / '{' CSSPropertyValueSemiColonAllowedPart* '}'
 
 CSSPropertyValueSemiColonAllowedPart
-  = _:_CSSPropertyValueSemiColonAllowedPart
-    {
-		if(Array.isArray(_)) {
-			return [].concat.apply([], _);
-		}
-		else {
-			return _;
-		}
-	}
-
-_CSSPropertyValueSemiColonAllowedPart
-  = CSSPropertyValueJavaScriptPart
-  / CSSPropertyValueBalancedPairPart
-  / _:(
-        !'#{' ![[({})\]] !'/*' !'*/'
-        _:(
-            '\\\\' &'#{' { return '\\' }
-            / '\\#' &'{' { return '#' }
-            / .
-        )
-        {
-            return _
-        }
-    )+
-    {
-        return _.join('');
-    }
-
-CSSPropertyValueJavaScriptPart
-  = '#{' __* js:UnparsedJavaScript? __* '}'
-    {
-        return { js: js.code };
-    }
+  = CSSPropertyValueBalancedPairPart
+  / $(CSSString)
+  / $((!['"[({})\]] !'/*' !'*/' .)+)
 
 UnparsedJavaScript
   = _:$(UnparsedJavaScriptElement+)
