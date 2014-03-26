@@ -105,18 +105,35 @@ CSSPropertyValuePart
 
 CSSPropertyValueGenericPart
   = CSSPropertyValueBalancedPairPart
-  / $(!'#{' ![[({})\]] !'/*' !'*/' !';' .)+
+  / $(!'#{' ![[({})\]] !'/*' !'*/' !';' ('\\#' / .))+
 
 CSSPropertyValueBalancedPairPart
-  = '(' _:CSSPropertyValueSemiColonAllowedPart* ')'
+  = _:_CSSPropertyValueBalancedPairPart
     {
-        return [].concat('(', _, ')');
+		_[1] = [].concat.apply([], _[1]);
+		return [].concat.apply([], _);
     }
 
+_CSSPropertyValueBalancedPairPart
+  = '[' CSSPropertyValueSemiColonAllowedPart* ']'
+  / '(' CSSPropertyValueSemiColonAllowedPart* ')'
+  / '{' CSSPropertyValueSemiColonAllowedPart* '}'
+
 CSSPropertyValueSemiColonAllowedPart
+  = _:_CSSPropertyValueSemiColonAllowedPart
+    {
+		if(Array.isArray(_)) {
+			return [].concat.apply([], _);
+		}
+		else {
+			return _;
+		}
+	}
+
+_CSSPropertyValueSemiColonAllowedPart
   = CSSPropertyValueJavaScriptPart
   / CSSPropertyValueBalancedPairPart
-  / $(!'#{' ![[({})\]] !'/*' !'*/' .)+
+  / $(!'#{' ![[({})\]] !'/*' !'*/' ('\\#' / .))+
 
 CSSPropertyValueJavaScriptPart
   = '#{' __* js:UnparsedJavaScript? __* '}'
