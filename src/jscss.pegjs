@@ -100,7 +100,6 @@ CSSPropertyValue
 
 CSSPropertyValuePart
   = CSSPropertyValueJavaScriptPart
-  / CSSPropertyValueBalancedPairPart
   / CSSPropertyValueGenericPart
 
 CSSPropertyValueGenericPart
