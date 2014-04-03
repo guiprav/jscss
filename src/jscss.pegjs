@@ -69,6 +69,7 @@ CSSGeneralStringCharacter
   / '\\\\'
   / $('\\' [0-9a-fA-F] [0-9a-fA-F]?)
   / $('\\' NewLine)
+  / '\\#'
   / $(!'\\' !['"] !NewLine .)
  
 CSSProperty
@@ -103,6 +104,31 @@ CSSPropertyValueSemiColonAllowedPart
   = CSSPropertyValueBalancedPairPart
   / $(CSSString)
   / $((!['"[({})\]] !'/*' !'*/' .)+)
+
+JavaScriptInterpolations
+  = JavaScriptInterpolationPart*
+
+JavaScriptInterpolationPart
+  = _:(
+        !'#{'
+		_:(
+            '\\#{' / $('\\' .) / .
+        )
+        {
+			var dreaded_string = '#' + String.fromCharCode(123);
+			if(_ === '\\' + dreaded_string) {
+				return dreaded_string;
+			}
+			else {
+				return _;
+			}
+		}
+	)+
+    {
+        return _.join('');
+    }
+
+  / !'\\' '#{' _:UnparsedJavaScript '}' { return _ }
 
 UnparsedJavaScript
   = _:$(UnparsedJavaScriptElement+)

@@ -31,7 +31,11 @@ var input_data = fs.readFileSync(input_file, 'utf8');
 var grammar_source = fs.readFileSync(__dirname + '/../src/jscss.pegjs', 'utf8');
 var jscss;
 try {
-	jscss = peg.buildParser(grammar_source);
+	jscss = peg.buildParser (
+		grammar_source, {
+			allowedStartRules: ['start', 'JavaScriptInterpolations']
+		}
+	);
 }
 catch(err) {
 	console.error("Could not build parser:", err.message);
@@ -57,7 +61,12 @@ console.log (
 	)
 );
 console.log();
-var final_code = codegen(parse_results);
+var final_code = codegen (
+	parse_results
+	, function deinterpolate(text) {
+		return jscss.parse(text, { startRule: 'JavaScriptInterpolations' });
+	}
+);
 console.log("Final JavaScript function body:\n" + final_code);
 console.log();
 console.log("Final CSS:");

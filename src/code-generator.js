@@ -1,4 +1,4 @@
-module.exports = function(ast) {
+module.exports = function(ast, deinterpolate) {
 	var code = 'var jscss$css = "";';
 	ast.forEach (
 		function(element) {
@@ -14,33 +14,23 @@ module.exports = function(ast) {
 					var rule_body;
 					element.properties.forEach (
 						function(property) {
-							var value;
-							if(typeof(property.value) === 'string') {
-								value = JSON.stringify(property.value);
-							}
-							else {
-								value = property.value;
-								if(!Array.isArray(value)) {
-									value = [value];
-								}
-								value = value.map (
-									function(part) {
-										if(typeof(part) === 'string') {
-											return JSON.stringify(part);
-										}
-										else {
-											var compute_local_fn = new Function (
-												'return ' + part.js + ';'
-											);
-											compute_locals +=
-													'\nlocals.push ('
-													+ '\n(' + compute_local_fn + '\n)()'
-													+ '\n);';
-											return 'locals[' + (next_local_id++) + ']';
-										}
+							value = deinterpolate(property.value).map (
+								function(part) {
+									if(typeof(part) === 'string') {
+										return JSON.stringify(part);
 									}
-								);
-							}
+									else {
+										var compute_local_fn = new Function (
+											'return ' + part.code + ';'
+										);
+										compute_locals +=
+												'\nlocals.push ('
+												+ '\n(' + compute_local_fn + '\n)()'
+												+ '\n);';
+										return 'locals[' + (next_local_id++) + ']';
+									}
+								}
+							);
 							rule_body_parts = rule_body_parts.concat (
 								JSON.stringify('\n\t' + property.name + ': ')
 								, value
