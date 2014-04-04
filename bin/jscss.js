@@ -52,22 +52,10 @@ catch(err) {
 	console.error("Line", err.line + ", column", err.column + ":", err.message);
 	process.exit(-1);
 }
-console.log("JSCSS parse tree:");
-console.log (
-	util.inspect (
-		jscss.parse(input_data), {
-			depth: null
-		}
-	)
-);
-console.log();
 var final_code = codegen (
 	parse_results
 	, function deinterpolate(text) {
 		return jscss.parse(text, { startRule: 'JavaScriptInterpolations' });
 	}
 );
-console.log("Final JavaScript function body:\n" + final_code);
-console.log();
-console.log("Final CSS:");
-console.log((new Function(final_code))());
+console.log(final_code);
