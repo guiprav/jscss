@@ -1,5 +1,6 @@
 module.exports = function(ast, deinterpolate) {
-	var code = 'var jscss$css = "";';
+	var code = 'function generate_css() {'
+			+ '\nvar jscss$css = "";';
 	ast.forEach (
 		function(element) {
 			switch(element.type) {
@@ -60,6 +61,7 @@ module.exports = function(ast, deinterpolate) {
 			}
 		}
 	);
-	code += '\nreturn jscss$css;';
+	code += '\nreturn jscss$css;'
+			+ '\n}';
 	return code;
 }
