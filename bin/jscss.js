@@ -24,9 +24,10 @@ var codegen = require('../src/code-generator');
 var input_file = process.argv[2];
 if(!input_file) {
 	console.error("Missing input file.");
-	console.log("Usage: node jscss.js input-file");
+	console.log("Usage: node jscss.js input-file [style name]");
 	process.exit(-1);
 }
+var style_name = process.argv[3];
 var input_data = fs.readFileSync(input_file, 'utf8');
 var grammar_source = fs.readFileSync(__dirname + '/../src/jscss.pegjs', 'utf8');
 var jscss;
@@ -53,7 +54,8 @@ catch(err) {
 	process.exit(-1);
 }
 var final_code = codegen (
-	parse_results
+	style_name
+	, parse_results
 	, function deinterpolate(text) {
 		return jscss.parse(text, { startRule: 'JavaScriptInterpolations' });
 	}

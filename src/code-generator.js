@@ -1,5 +1,5 @@
-module.exports = function(ast, deinterpolate) {
-	var code = 'function generate_css() {'
+module.exports = function(style_name, ast, deinterpolate) {
+	var code = 'function() {'
 			+ '\nvar jscss$css = "";';
 	ast.forEach (
 		function(element) {
@@ -63,5 +63,10 @@ module.exports = function(ast, deinterpolate) {
 	);
 	code += '\nreturn jscss$css;'
 			+ '\n}';
+	if(style_name) {
+		code = 'window.jscss = window.jscss || {};'
+				+ '\nwindow.jscss[' + JSON.stringify(style_name) + '] ='
+				+ '\n' + code + ';'
+	}
 	return code;
 }
