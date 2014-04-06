@@ -111,19 +111,19 @@ JavaScriptInterpolations
 JavaScriptInterpolationPart
   = _:(
         !'#{'
-		_:(
+        _:(
             '\\#{' / $('\\' .) / .
         )
         {
-			var dreaded_string = '#' + String.fromCharCode(123);
-			if(_ === '\\' + dreaded_string) {
-				return dreaded_string;
-			}
-			else {
-				return _;
-			}
-		}
-	)+
+            var dreaded_string = '#' + String.fromCharCode(123);
+            if(_ === '\\' + dreaded_string) {
+                return dreaded_string;
+            }
+            else {
+                return _;
+            }
+        }
+    )+
     {
         return _.join('');
     }
